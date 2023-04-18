@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>CF Pages & Durable objects</title>
+    <script src="/i.js"></script>
+</head>
+<body>
+    <script type=i>
+        <h1>CF Pages & Durable objects</h1>
+
+        <h2 text('Counter: ' + state.counter)/>
+
+        <button text('Increment') @click({
+            const data = await (await fetch('/increment')).json();
+            this.state.counter = data.count;
+        })/>
+
+        <button text('Decrement') @click({
+            this.state.counter = (await (await fetch('/decrement')).json()).count;
+        })/>
+
+        <!state>
+            counter: 0
+
+        <!class>
+            async connected() {
+                const response = await fetch('/get');
+                const data = await response.json();
+                console.log(data);
+                this.state.counter = data.count;
+                this.render();
+            }
+    </script>
+</body>
+</html>
